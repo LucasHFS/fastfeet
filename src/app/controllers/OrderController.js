@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-
 import Recipient from '../models/Recipients';
 import Deliveryman from '../models/Deliveryman';
 import Order from '../models/Order';
@@ -8,28 +7,6 @@ import NewOrderMail from '../jobs/NewOrderMail';
 import CancellationMail from '../jobs/CancellationMail';
 
 class OrderController {
-  async index(req, res) {
-    const { id } = req.params;
-
-    const orders = await Order.findAll({
-      where: {
-        deliveryman_id: id,
-        canceled_at: null,
-        end_date: null,
-      },
-      attributes: ['id', 'product'],
-      include: [
-        {
-          model: Recipient,
-          as: 'recipient',
-          attributes: ['id', 'name'],
-        },
-      ],
-    });
-    // não estejam entregues ou canceladas;
-    return res.json(orders);
-  }
-
   async store(req, res) {
     const schema = Yup.object().shape({
       product: Yup.string().required(),
