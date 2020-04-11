@@ -7,13 +7,13 @@ import Order from '../models/Order';
 
 class DeliveryController {
   async index(req, res) {
-    if (!req.params.id) {
+    if (!req.body.deliveryman_id) {
       return res.status(400).json({ err: 'You must provide your id' });
     }
 
-    const { id } = req.params;
+    const { deliveryman_id } = req.params;
 
-    const deliveryman = await Deliveryman.findByPk(req.params.id);
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
 
     if (!deliveryman) {
       return res.status(400).json({ err: 'Deliveryman not Found!' });
@@ -21,7 +21,7 @@ class DeliveryController {
 
     const orders = await Order.findAll({
       where: {
-        deliveryman_id: id,
+        deliveryman_id,
         canceled_at: null,
         end_date: null,
       },
@@ -37,14 +37,14 @@ class DeliveryController {
     return res.json(orders);
   }
 
-  async deliveries(req, res) {
-    if (!req.params.id) {
+  async sent(req, res) {
+    if (!req.body.deliveryman_id) {
       return res.status(400).json({ err: 'You must provide your id' });
     }
 
-    const { id } = req.params;
+    const { deliveryman_id } = req.body;
 
-    const deliveryman = await Deliveryman.findByPk(req.params.id);
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
 
     if (!deliveryman) {
       return res.status(400).json({ err: 'Deliveryman not Found!' });
@@ -52,7 +52,7 @@ class DeliveryController {
 
     const orders = await Order.findAll({
       where: {
-        deliveryman_id: id,
+        deliveryman_id,
         canceled_at: null,
         end_date: {
           [Op.not]: null,
@@ -72,13 +72,13 @@ class DeliveryController {
 
   async update(req, res) {
     const schema_params = Yup.object().shape({
-      id: Yup.string().required(),
       order_id: Yup.string().required(),
     });
 
     const schema_body = Yup.object().shape({
       start_date: Yup.string(),
       end_date: Yup.string(),
+      signature_id: Yup.string(),
     });
 
     if (
@@ -92,13 +92,15 @@ class DeliveryController {
     const order = await Order.findOne({
       where: {
         id: req.params.order_id,
-        deliveryman_id: req.params.id,
+        deliveryman_id: req.body.deliveryman_id,
       },
     });
 
     if (!order) {
       return res.status(400).json({ err: 'Order not found' });
     }
+
+    //TODO:  Verify if has less than 5 take out 
 
     order.save(req.body);
 

@@ -6,8 +6,9 @@ import Recipients from '../app/models/Recipients';
 import Deliveryman from '../app/models/Deliveryman';
 import File from '../app/models/File';
 import Order from '../app/models/Order';
+import Problem from '../app/models/Problem';
 
-const models = [User, Recipients, Deliveryman, File, Order];
+const models = [User, Recipients, Deliveryman, File, Order, Problem];
 
 class Database {
   constructor() {
