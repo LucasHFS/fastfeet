@@ -19,16 +19,15 @@ routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 
 routes.get('/deliveries', DeliveryController.index);
-routes.get('/deliveries/sent', DeliveryController.sent); //Entregue
+routes.get('/deliveries/sent', DeliveryController.sent);
 routes.put('/deliveries/:order_id', DeliveryController.update);
 
-routes.get('/deliveries/problems', DeliveryController.index);
-routes.get('/deliveries/:id/problems', DeliveryController.index);
-routes.post('/deliveries/:id/problems', DeliveryController.index);
-
+routes.post('/deliveries/:id/problems', ProblemController.create);
 
 routes.use(authMiddleware);
 
+routes.get('/deliveries/problems', ProblemController.index);
+routes.get('/deliveries/:id/problems', ProblemController.problems);
 routes.delete('/problem/:id/cancel-delivery', ProblemController.delete);
 
 routes.post('/recipients', RecipientController.store);

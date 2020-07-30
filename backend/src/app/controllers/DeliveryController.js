@@ -11,7 +11,7 @@ class DeliveryController {
       return res.status(400).json({ err: 'You must provide your id' });
     }
 
-    const { deliveryman_id } = req.params;
+    const { deliveryman_id } = req.body;
 
     const deliveryman = await Deliveryman.findByPk(deliveryman_id);
 
@@ -100,7 +100,7 @@ class DeliveryController {
       return res.status(400).json({ err: 'Order not found' });
     }
 
-    //TODO:  Verify if has less than 5 take out 
+    // TODO:  Verify if has less than 5 take out
 
     order.save(req.body);
 
